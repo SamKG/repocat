@@ -2,6 +2,8 @@
 name = "repocat"
 version = "0.1.0"
 edition = "2021"
+description = "A tool to concatenate all code and text files in a github repo for LLM inference contexts"
+repository = "https://github.com/SamKG/repocat"
 
 [dependencies]
 anyhow = "1.0.86"
