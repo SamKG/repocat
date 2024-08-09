@@ -55,16 +55,16 @@ fn load_config(config_path: &Option<PathBuf>) -> Result<Config> {
         }
         None => Ok(Config {
             file_extensions: vec![
-                // "toml".to_string(),
-                // "md".to_string(),
+                "toml".to_string(),
+                "md".to_string(),
                 "py".to_string(),
-                // "rs".to_string(),
-                // "cpp".to_string(),
-                // "h".to_string(),
-                // "hpp".to_string(),
-                // "c".to_string(),
-                // "rst".to_string(),
-                // "txt".to_string(),
+                "rs".to_string(),
+                "cpp".to_string(),
+                "h".to_string(),
+                "hpp".to_string(),
+                "c".to_string(),
+                "rst".to_string(),
+                "txt".to_string(),
             ],
         }),
     }
