@@ -1,6 +1,6 @@
 # REPOCAT 🐱
 
-This is a cli that accepts either:
+This is a simple cli tool that accepts either:
 1) a github repo url
 2) a path to a folder
 
