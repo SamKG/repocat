@@ -1,6 +1,6 @@
 [package]
 name = "repocat"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "A tool to concatenate all code and text files in a github repo for LLM inference contexts"
 repository = "https://github.com/SamKG/repocat"
