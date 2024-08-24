@@ -39,6 +39,8 @@ jobs:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Cache cargo registry
@@ -62,14 +64,12 @@ jobs:
           override: true
       - name: Build Release Binary
         run: cargo build --release --verbose
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/release/repocat
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./target/release/repocat
-          asset_name: repocat-${{ github.ref_name }}-linux-amd64
-          asset_content_type: application/octet-stream
       - name: Publish package
         run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
