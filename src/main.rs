@@ -65,6 +65,8 @@ fn load_config(config_path: &Option<PathBuf>) -> Result<Config> {
                 "c".to_string(),
                 "rst".to_string(),
                 "txt".to_string(),
+                "cuh".to_string(),
+                "cu".to_string(),
             ],
         }),
     }
