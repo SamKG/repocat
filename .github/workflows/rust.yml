@@ -8,6 +8,7 @@ on:
     types: [created]
 env:
   CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
 
 jobs:
   build:
@@ -33,8 +34,8 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-    
-  publish:
+
+  release:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'
     runs-on: ubuntu-latest
@@ -59,5 +60,16 @@ jobs:
         with:
           toolchain: stable
           override: true
+      - name: Build Release Binary
+        run: cargo build --release --verbose
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./target/release/repocat
+          asset_name: repocat-${{ github.ref_name }}-linux-amd64
+          asset_content_type: application/octet-stream
       - name: Publish package
         run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
