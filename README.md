@@ -1,23 +1,116 @@
 # REPOCAT 🐱
 
-This is a simple cli tool that accepts either:
-1) a github repo url
-2) a path to a folder
+A simple CLI tool that accepts either:
+1. A GitHub repository URL
+2. A local folder path
 
-and concatenates all text/code files into a single txt file. This makes it easier to use as context for LLMs.
+and concatenates all text/code files into a single `.txt` file. This can be useful for providing context to LLMs or other tools that need a single “flattened” representation of your codebase.
 
-## What file extensions does it look for?
-Check [src/main.rs] for extensions. Feel free to make a PR to add more
+## Features
 
-## Does it automatically filter some files?
-Yes! repocat uses the [ignore crate from ripgrep](https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#automatic-filtering), meaning it ignores all of the following by default:
+- **Configurable Include/Exclude**: Specify which file types to include or exclude using glob patterns.
+- **Automatic Ignore**: By default, `repocat` respects `.gitignore` and other ignore files (unless you disable it).
+- **GitHub Repo Cloning**: Automatically clones a GitHub repository and concatenates matching files.
+- **Checkout Specific Branch/Commit/Tag** (via `--checkout`).
+- **Preserve or Strip Blank Lines** (via `--keep-blank-lines`).
+- **Optionally Disable Ignore Rules** (via `--no-ignore`).
 
-    Files and directories that match glob patterns in these three categories:
-        .gitignore globs (including global and repo-specific globs). This includes .gitignore files in parent directories that are part of the same git repository. (Unless the --no-require-git flag is given.)
-        .ignore globs, which take precedence over all gitignore globs when there's a conflict. This includes .ignore files in parent directories.
-        .rgignore globs, which take precedence over all .ignore globs when there's a conflict. This includes .rgignore files in parent directories.
-    Hidden files and directories.
-    Binary files. (ripgrep considers any file with a NUL byte to be binary.)
-    Symbolic links aren't followed.
+## Installation
 
+If you have Rust (and Cargo) installed:
 
+```bash
+cargo install repocat
+```
+
+Alternatively, clone this repository and run:
+
+```bash
+cargo build --release
+```
+
+Your compiled binary will be in the `target/release` directory.
+
+## Usage Examples
+
+### 1. Local Folder Input
+
+```bash
+repocat --input /path/to/my-project
+```
+
+- This will walk the `my-project` folder, respecting `.gitignore` by default.
+- Includes files matching `*.toml, *.md, *.py, *.rs, *.cpp, *.h, *.hpp, *.c, *.rst, *.txt, *.cuh, *.cu`.
+- Writes all content into `concatenated_output.txt`.
+- By default, input is `.`
+
+### 2. GitHub Repository
+
+```bash
+repocat --input https://github.com/owner/repo
+```
+
+- Clones `repo` from GitHub into a temporary folder.
+- By default, it checks out the default branch (e.g., `main` or `master`).
+- Gathers all matching files and writes them to `concatenated_output.txt`.
+
+### 3. Checking Out a Specific Branch or Commit
+
+```bash
+repocat --input https://github.com/owner/repo --checkout feature-branch
+```
+
+```bash
+repocat --input https://github.com/owner/repo --checkout abcd1234
+```
+
+- Clones the specified repository, then checks out either a branch named `feature-branch` or the commit `abcd1234`.
+- Proceeds to gather and concatenate files as usual.
+
+### 4. Including and Excluding Specific File Types
+
+```bash
+repocat \
+  --input /path/to/my-project \
+  --include "*.rs,*.toml" \
+  --exclude "*.lock,*.bak"
+```
+
+- Only gathers `.rs` and `.toml` files, while excluding anything ending with `.lock` or `.bak`.
+
+### 5. Preserving Blank Lines
+
+By default, repocat removes blank lines for more compact output. If you want to preserve them:
+
+```bash
+repocat --input /path/to/my-project --keep-blank-lines
+```
+
+- This keeps the blank lines in your final concatenated output.
+
+### 6. Disabling Ignore Logic
+
+If you want to include hidden and/or binary files, you can disable all ignore logic:
+
+```bash
+repocat --input /path/to/my-project --no-ignore
+```
+
+- This will cause repocat to walk the folder without ignoring anything.  
+- **Warning**: This may significantly increase the size of your output if your project has large binary files or directories like `.git`.
+
+## Additional Info
+
+- `repocat` uses the [ignore crate](https://github.com/BurntSushi/ripgrep) by default, which means it respects `.gitignore`, `.ignore`, and `.rgignore` files, along with hidden file filtering and binary file detection.
+- The default list of “included” file extensions can be found in `src/lib.rs`, but can be overridden via the `--include` and `--exclude` flags.
+- If you prefer to keep blank lines in your concatenated output, use `--keep-blank-lines`. Otherwise, empty lines are removed.
+
+## Roadmap / Future Enhancements
+
+- **JSON Output**: A possible future feature to output file metadata and content in a structured JSON format.
+- **Partial Extraction**: Extract only certain lines or only lines matching a pattern.
+- **Parallel Processing**: Speed up concatenation by reading files in parallel.
+
+---
+
+*Thanks for checking out repocat! Feel free to open an issue or pull request if you have suggestions or encounter any problems.*

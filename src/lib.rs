@@ -33,23 +33,17 @@ pub fn run_repocat(args: Args) -> Result<()> {
     let includes = args.clone().include.unwrap_or(default_include);
     let excludes = args.clone().exclude.unwrap_or_default();
 
+    let mut input = args.input.clone();
+
     // If input starts with "https://github.com", treat it as a remote GitHub repo
     if args.input.starts_with("https://github.com") {
         let repo_path = clone_or_fallback(
             &args.input,
             &args.checkout, // new argument to specify branch, commit etc.
         )?;
-        process_local_folder(
-            &(repo_path.to_str().unwrap()),
-            &args.output,
-            &includes,
-            &excludes,
-            &args,
-        )?;
-    } else {
-        // Otherwise, treat as local folder path
-        process_local_folder(&args.input, &args.output, &includes, &excludes, &args)?;
+        input = repo_path.to_str().unwrap().to_string();
     }
+    process_local_folder(&input, &args.output, &includes, &excludes, &args)?;
 
     println!(
         "All matching files have been concatenated into '{}'",
