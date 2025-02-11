@@ -20,3 +20,6 @@ git2 = { version = "0.19.0", optional = true, features=["vendored-libgit2", "ven
 
 [features]
 git = ["git2"]
+default = ["git"]
+
+
