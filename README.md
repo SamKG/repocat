@@ -4,7 +4,7 @@ A simple CLI tool that accepts either:
 1. A GitHub repository URL
 2. A local folder path
 
-and concatenates all text/code files into a single `.txt` file. This can be useful for providing context to LLMs or other tools that need a single “flattened” representation of your codebase.
+and concatenates all text/code files into a single string output. This can be useful for providing context to LLMs or other tools that need a single “flattened” representation of your codebase.
 
 ## Features
 
