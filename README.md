@@ -36,18 +36,18 @@ Your compiled binary will be in the `target/release` directory.
 ### 1. Local Folder Input
 
 ```bash
-repocat --input /path/to/my-project
+repocat --root /path/to/my-project
 ```
 
 - This will walk the `my-project` folder, respecting `.gitignore` by default.
 - Includes files matching `*.toml, *.md, *.py, *.rs, *.cpp, *.h, *.hpp, *.c, *.rst, *.txt, *.cuh, *.cu`.
 - Writes all content into `concatenated_output.txt`.
-- By default, input is `.`
+- By default, root is `.`
 
 ### 2. GitHub Repository
 
 ```bash
-repocat --input https://github.com/owner/repo
+repocat --root https://github.com/owner/repo
 ```
 
 - Clones `repo` from GitHub into a temporary folder.
@@ -57,11 +57,11 @@ repocat --input https://github.com/owner/repo
 ### 3. Checking Out a Specific Branch or Commit
 
 ```bash
-repocat --input https://github.com/owner/repo --checkout feature-branch
+repocat --root https://github.com/owner/repo --checkout feature-branch
 ```
 
 ```bash
-repocat --input https://github.com/owner/repo --checkout abcd1234
+repocat --root https://github.com/owner/repo --checkout abcd1234
 ```
 
 - Clones the specified repository, then checks out either a branch named `feature-branch` or the commit `abcd1234`.
@@ -71,7 +71,7 @@ repocat --input https://github.com/owner/repo --checkout abcd1234
 
 ```bash
 repocat \
-  --input /path/to/my-project \
+  --root /path/to/my-project \
   --include "*.rs,*.toml" \
   --exclude "*.lock,*.bak"
 ```
@@ -83,7 +83,7 @@ repocat \
 By default, repocat removes blank lines for more compact output. If you want to preserve them:
 
 ```bash
-repocat --input /path/to/my-project --keep-blank-lines
+repocat --root /path/to/my-project --keep-blank-lines
 ```
 
 - This keeps the blank lines in your final concatenated output.
@@ -93,10 +93,10 @@ repocat --input /path/to/my-project --keep-blank-lines
 If you want to include hidden and/or binary files, you can disable all ignore logic:
 
 ```bash
-repocat --input /path/to/my-project --no-ignore
+repocat --root /path/to/my-project --no-ignore
 ```
 
-- This will cause repocat to walk the folder without ignoring anything.  
+- This will cause repocat to walk the folder without ignoring anything.
 - **Warning**: This may significantly increase the size of your output if your project has large binary files or directories like `.git`.
 
 ## Additional Info
