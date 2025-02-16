@@ -5,14 +5,18 @@ use clap::Parser;
 #[command(author, version, about, long_about = None)]
 pub struct Args {
     /// GitHub repo URL or local folder path
-    #[arg(long, default_value = ".")]
-    pub input: String,
+    #[arg(short, long, default_value = ".")]
+    pub root: String,
 
-    /// Output file name
-    #[arg(short, long, default_value = "concatenated_output.txt")]
-    pub output: String,
+    /// Output to file name, if provided. Else, output to stdout.
+    #[arg(short, long)]
+    pub output: Option<String>,
 
-    /// Glob patterns to include files (e.g., "*.rs,*.toml")
+    /// If set, outputs using OSC 52 escape sequences to copy to clipboard directly.
+    #[arg(short, long = "cb", long, conflicts_with = "output")]
+    pub copy_to_clipboard: bool,
+
+    /// Glob patterns to include files. Typically used to indicate file extensions to focus on. (e.g., "*.rs,*.toml")
     #[arg(short, long, use_value_delimiter = true, value_delimiter = ',')]
     pub include: Option<Vec<String>>,
 
@@ -20,16 +24,16 @@ pub struct Args {
     #[arg(short, long, use_value_delimiter = true, value_delimiter = ',')]
     pub exclude: Option<Vec<String>>,
 
-    /// (NEW) A specific branch, tag, or commit to checkout after cloning
+    /// A specific branch, tag, or commit to checkout after cloning
     /// e.g. --checkout "my-branch" or --checkout "abc123"
     #[arg(long)]
     pub checkout: Option<String>,
 
-    /// (NEW) If set, blank lines will be preserved in the output
+    /// If set, blank lines will be preserved in the output
     #[arg(long)]
     pub keep_blank_lines: bool,
 
-    /// (NEW) If set, repocat will not ignore hidden or binary files.
+    /// If set, repocat will not ignore hidden or binary files.
     /// (In other words, it won't use the default ignore rules from ripgrep.)
     #[arg(long)]
     pub no_ignore: bool,

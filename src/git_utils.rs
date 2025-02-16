@@ -14,7 +14,7 @@ pub fn clone_or_fallback(repo_url: &str, checkout: &Option<String>) -> Result<Pa
     let temp_dir = tempdir()?;
     let repo_path = temp_dir.path().to_path_buf();
 
-    println!("Cloning repository into temporary directory...");
+    eprintln!("Cloning repository into temporary directory...");
 
     // Try using native Git CLI first
     let clone_result = Command::new("git")
@@ -24,14 +24,14 @@ pub fn clone_or_fallback(repo_url: &str, checkout: &Option<String>) -> Result<Pa
 
     let cloned_via_cli = match clone_result {
         Ok(output) if output.status.success() => {
-            println!("Successfully cloned using native Git CLI");
+            eprintln!("Successfully cloned using native Git CLI");
             true
         }
         _ => false,
     };
 
     if !cloned_via_cli {
-        println!("Native Git CLI failed, falling back to git2 library");
+        eprintln!("Native Git CLI failed, falling back to git2 library");
         #[cfg(feature = "git")]
         {
             let mut fo = FetchOptions::default();
@@ -49,7 +49,7 @@ pub fn clone_or_fallback(repo_url: &str, checkout: &Option<String>) -> Result<Pa
 
     // If we have a branch/tag/commit specified, check it out.
     if let Some(ref co) = checkout {
-        println!("Checking out '{}'", co);
+        eprintln!("Checking out '{}'", co);
 
         // Attempt native Git CLI first
         let checkout_result = Command::new("git")
