@@ -1,4 +1,9 @@
+
 # REPOCAT 🐱
+[![Crates.io][crates-badge]][crates-url]
+
+[crates-badge]: https://img.shields.io/crates/v/repocat.svg
+[crates-url]: https://crates.io/crates/repocat
 
 A simple CLI tool that accepts either:
 1. A GitHub repository URL
