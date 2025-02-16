@@ -31,6 +31,8 @@ cargo build --release
 
 Your compiled binary will be in the `target/release` directory.
 
+You may also use the pre-compiled binaries offered in the Release, though support for different platforms may be limited.
+
 ## Usage Examples
 
 ### 1. Local Folder Input
