@@ -1,5 +1,5 @@
 
-# REPOCAT 🐱
+# REPOCAT 🐯
 [![Crates.io][crates-badge]][crates-url]
 
 [crates-badge]: https://img.shields.io/crates/v/repocat.svg
