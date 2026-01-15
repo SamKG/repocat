@@ -1,5 +1,4 @@
 pub mod cli;
-pub mod git_utils;
 pub mod process_file;
 pub mod walk_utils;
 
@@ -10,7 +9,6 @@ use std::{
 
 use anyhow::{Context, Result};
 use cli::Args;
-use git_utils::clone_or_fallback;
 use process_file::{process_file_contents, should_process_file};
 use walk_utils::walk_directory;
 
@@ -38,15 +36,6 @@ pub fn run_repocat(args: Args) -> Result<()> {
     let excludes = args.clone().exclude.unwrap_or_default();
 
     let mut input = args.root.clone();
-
-    // If input starts with "https://github.com", treat it as a remote GitHub repo
-    if args.root.starts_with("https://github.com") {
-        let repo_path = clone_or_fallback(
-            &args.root,
-            &args.checkout, // new argument to specify branch, commit etc.
-        )?;
-        input = repo_path.to_str().unwrap().to_string();
-    }
 
     let tmp = walk_directory(&input, args.no_ignore)?;
     // filter paths
