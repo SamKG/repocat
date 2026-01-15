@@ -46,9 +46,8 @@ pub fn process_file_contents(path: &Path, keep_blank_lines: bool) -> Result<Stri
             .collect()
     };
 
-    // Prepend the file path as a header
     Ok(format!(
-        "*** {}\n{}",
+        "*** {}\n```\n{}\n```",
         path.to_str().unwrap_or("Unknown Path"),
         processed_lines.join("\n")
     ))
